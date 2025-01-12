@@ -13,16 +13,10 @@ provider "google" {
     region  = "us-east5-a"
 }
 
-variable zone {
-    type = list(string)
-    default = ["e2-micro", "e2-small"]
-}
-
 resource "google_compute_instance" "vm-instance" {
-    name         = "terraform-vm-instance-${count.index}"
-    machine_type = var.zone[count.index]
+    name         = "terraform-vm-instance"
+    machine_type = var.environment == "dev" && var.region == "us-east5-a" ? "e2-micro" : "e2-large"
     zone         = "us-east5-a"
-    count        = 2
 
     boot_disk {
         initialize_params {
